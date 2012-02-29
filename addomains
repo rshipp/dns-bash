@@ -1,0 +1,12 @@
+#!/bin/bash 
+# add domains to the 'domains' list in the correct format.
+if [ -z '$@' ]; then 
+  echo "Usage: $0 domain1.com ... domainN.org"
+  exit 1
+else 
+  for dom in "$@"; do
+    echo "$dom" >> domains
+  done
+  sort domains -o domains
+  exit 0
+fi

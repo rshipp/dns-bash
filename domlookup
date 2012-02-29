@@ -1,0 +1,32 @@
+#!/bin/bash 
+# look up a domain in the hosts file or domains list.
+if [ -z "$1" ]; then 
+  echo "Usage: $0 [-h OR -d OR none] somedomain.com ... someotherdomain.com"
+  exit 1
+else 
+  for arg in "$@"; do
+    if [ "$arg" == "-h" ]; then
+      if [ -z "$2" ]; then 
+        exit 
+      fi
+      lookin=h
+      doms=$(echo "$@" | sed 's/-h//')
+    elif [ "$arg" == "-d" ]; then
+      lookin=d
+      doms=$(echo "$@" | sed 's/-d\s*//')
+    else
+      lookin=${lookin-y}
+      doms=${doms-"$@"}
+    fi
+  done
+  for dom in "$doms"; do 
+    if [ "$lookin" == "h" ]; then 
+      grep -i ^[^\#].*[www\.]*"$dom" hosts
+    elif [ "$lookin" == "d" ]; then 
+      grep -i ^[www\.]*"$dom"$ domains
+    elif [ "$lookin" == "y" ]; then 
+      grep -i ^[www\.]*"$dom"$ domains >/dev/null && echo yes || echo no
+    fi
+  done
+  exit 0
+fi

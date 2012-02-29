@@ -1,0 +1,16 @@
+#!/bin/bash 
+# grep in the hosts or domains list.
+domains=${domains-domains} # change if needed
+hosts=${hosts-hosts} # /etc/hosts for global usage
+if [ -z "$1" ]; then 
+  echo "Usage: $0 [-h or -d or none] [grep options] somedomainORip"
+  exit 1
+elif [ "$1" == "-d" ]; then
+  switch
+  grep -i $@ $domains && exit 0 || exit 1
+elif [ "$1" == "-h" ]; then
+  switch
+  grep -i $@ $hosts && exit 0 || exit 1
+else 
+  grep -i $@ $domains && exit 0 || exit 1
+fi

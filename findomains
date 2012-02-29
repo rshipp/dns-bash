@@ -1,0 +1,64 @@
+#!/bin/bash
+# Find domains in a brute-force method. 
+# (Does not find all domains, or anywhere close, and it takes forever. Have fun! :)
+[[ -z "$num1" ]] && num1=1  #this allows you to continue where you left off
+[[ -z "$num2" ]] && num2=0  #by settings these values in the shell.
+[[ -z "$num3" ]] && num3=0
+[[ -z "$num4" ]] && num4=1
+doms=0
+
+function fin() {
+  echo Keyboard interrupt trapped. >&2
+  echo $doms domains found. End values: num1=$num1 num2=$num2 num3=$num3 num4=$num4 cont=y >&2
+  echo "# Continue script with: num1=$num1 num2=$num2 num3=$num3 num4=$num4 cont=y $0" >> some_hosts
+  exit 0
+}
+
+trap fin INT
+if [ -z "$cont" ]; then 
+  echo -n > some_hosts
+fi
+while [ $num1 -le 255 ]; do
+  if [ $num1 -eq 10 ]; then
+    num1=11
+    continue
+  fi
+  while [ $num2 -le 255 ]; do
+    if [ $num2 -eq 172 ]; then
+      if [ $num3 -ge 16 -a $num3 -le 31 ]; then
+        num3=32
+        continue
+      fi
+    fi
+    while [ $num3 -le 255 ]; do
+      while [ $num4 -le 254 ]; do
+        ip=$num1.$num2.$num3.$num4
+        domlist=$(dig +short -x $ip)
+        if [ -n "$domlist" ]; then 
+          domlist=$(echo "$domlist" | sed s/\ //g)
+          for dom in $domlist; do
+            if ! (echo $dom | grep \;\; >/dev/null); then 
+              dom=$(echo $dom | sed 's/\.$/\ /')
+              echo $ip $dom >> some_hosts
+              let doms=$doms+1
+            fi
+          done
+          echo -n found-\ 
+        fi
+        echo $ip
+        let num4=$num4+1
+        continue
+      done
+      let num3=$num3+1
+      num4=1
+    done
+    let num2=$num2+1
+    num4=1
+  done
+  let num1=$num1+1
+  num4=1
+done
+
+echo done. >&2
+echo $doms domains found. >&2
+exit 0

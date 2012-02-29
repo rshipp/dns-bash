@@ -1,0 +1,39 @@
+#!/bin/bash 
+# optimize/clean up the list of domains in the file 'domains' (or a command-line arg)
+domains=${1-domains}
+if [ -r $domains ]; then 
+  startnum=$(wc -l $domains | awk '{printf $1}')
+  startc=$(wc -c $domains | awk '{printf $1}')
+  sort -u $domains |        # sort and discard duplicates, then send to standard output and through the pipeline
+    #sed 's/www\.//' |      # get rid of www.s (some sites, like wolframalpha, need the www, so I will uncomment this when I fix the www-bug in makehosts.
+     sed 's/\s*//g' |       # get rid of spaces
+      sed 's@http://@@' |   # remove protocol prefixes for http, 
+       sed 's@https://@@' | # https, 
+        sed 's@ftp://@@' |  # ftp, 
+         sed 's@irc://@@' | # and irc
+          sed 's/\/.*//g' | # get rid of paths, like /index.html
+           sed 's/[\#\/\\\?\,\;\:\"\(\)\*\&\^\%\|\$\@\!\`\<\>]*//g' | # get rid of some special chars illegal in a domain name
+            sort -uo $domains # finally, sort and remove dulpicates again, and write to 'domains'
+else 
+  echo "File '$domains' does not exist or is not readable."
+  exit 2
+fi
+endnum=$(wc -l $domains | awk '{printf $1}')
+endc=$(wc -c $domains | awk '{printf $1}')
+let dnum=$startnum-$endnum
+let dchar=$startc-$endc
+if [ $dnum -eq 1 ]; then 
+  echo -n 1 line
+elif [ $dnum -ge 0 ]; then 
+  echo -n $dnum lines
+else
+  echo -n Error >&2
+fi
+if [ $dchar -eq 1 ]; then 
+  echo ", 1 character"
+elif [ $dchar -ge 0 ]; then 
+  echo -n ", $dchar characters"
+else
+  echo -n Error >&2
+fi
+echo " removed; $endnum domains in file '$domains'."

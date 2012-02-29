@@ -1,0 +1,4 @@
+#!/bin/bash
+alias hostats='echo "`tail -1 hosts`"'
+alias hosgrep='domgrep -h' # './domgrep -h' if not installed
+alias hoslookup='domlookup -h' # './domlookup -h' if not installed

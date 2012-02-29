@@ -1,0 +1,37 @@
+#!/bin/bash 
+# ldig - (local dig)
+# look up a domain in a hosts file, with dig (+short) syntax
+hosts=${hosts-./hosts}
+if [ -z "$1" ]; then 
+  echo "Usage: $0 [-x someip OR somedomain.com]"
+  exit 1
+elif [ "$1" == "-x" ]; then 
+  if [ -z "$2" ]; then
+    echo "Usage: $0 [-x someip OR somedomain.com]"
+  else
+    shift
+    for ip in $@; do
+      if test -r $hosts; then
+        grep -i "^$ip\s" "$hosts" | awk '{print $2}'
+      elif test -r /etc/hosts; then
+        echo using file /etc/hosts >&2
+        grep -i "^$ip\s" /etc/hosts | awk '{print $2}'
+      else
+        echo cannot find local hosts file, using system dig >&2
+        dig +short -x "$ip"
+      fi
+    done
+  fi
+else
+  for dom in $@; do 
+    if test -r $hosts; then
+      grep -i "^[^\#].*\s[www\.]*$dom\(\s\|\$\)" "$hosts" | awk '{print $1}'  # regex, beautiful regex :)
+    elif test -r /etc/hosts; then
+      echo using file /etc/hosts >&2
+      grep -i "^[^\#].*\s[www\.]*$dom\(\s\|\$\)" /etc/hosts | awk '{print $1}'
+    else
+      echo "cannot find local hosts file, using system dig" >&2
+      dig +short "$dom"
+    fi
+  done
+fi
