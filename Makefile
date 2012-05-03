@@ -1,6 +1,6 @@
 # Makefile for my dns scripts package
 # `make dist' needs my bundle >= 0.9.1.
-allscripts = addomains dns_aliases dnsinkhole domgrep domlookup findomains ldig makehosts optdomains domains.example hosts.example pdnsd.conf
+allscripts = addomains blacklist.example dns_aliases dnsinkhole domgrep domlookup findomains ldig makehosts optdomains domains.example hosts.example pdnsd.conf
 
 all: 
 	@echo "This makefile is meant for use by the author of this package. "
