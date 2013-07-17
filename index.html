@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>dns-bash by george2</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">dns-bash</h1>
+        <p class="header"></p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/george2/dns-bash/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/george2/dns-bash/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/george2/dns-bash">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/george2">george2</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a name="dns-bash" class="anchor" href="#dns-bash"><span class="octicon octicon-link"></span></a>dns-bash</h1>
+
+<p>These are just a few DNS-related bash scripts I use to create a custom hosts file, among other things. They can be thought of in two ways: either as a set of DNS-backup scripts for the paranoid, or a way to significantly speed up browsing performance. </p>
+
+<p>Hint: These were created when <a href="http://sopastrike.com/strike/">SOPA</a> was under consideration. </p>
+
+<h1>
+<a name="how-to-use-the-scripts" class="anchor" href="#how-to-use-the-scripts"><span class="octicon octicon-link"></span></a>How to use the scripts</h1>
+
+<pre><code>addomains duckduckgo.com github.com www.example.com
+# These are all the sites I want to have in my hosts file
+# You can also just edit the 'domains' file manually, 
+#  see domains.example for format.
+optdomains
+# This will make the domains file smaller and more efficient.
+# It is optional, but recommended.
+makedomains
+# This is where the important stuff happens.
+sudo cp hosts /etc/hosts
+# If you're going to use this as your hosts file, install it in etc.
+</code></pre>
+
+<p>You can also leave the generated hosts file in the working dir, and use the other scripts (<code>domgrep</code>, <code>domlookup</code>, <code>ldig</code>) to do random stuff with domains and their IPs. </p>
+
+<p>If you want to brute-force the internet, run <code>findomains</code>, wait a few hundred years until it finishes, then look in disappointment at the small portion of the internet for which you now have an already-out-of-date list of IPs and domains. Have fun with that.</p>
+
+<p>Finally, if you want to test your setup to see what it would be like to live without dns, just run <code>dnsinkhole</code> as root. Press <code>Ctrl-D</code> or <code>Ctrl-C</code> to stop the sinkhole.</p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
