@@ -2,7 +2,7 @@
 # Find domains in a brute-force method. 
 # (Does not find all domains, or anywhere close, and it takes forever. Have fun! :)
 [[ -z "$num1" ]] && num1=1  #this allows you to continue where you left off
-[[ -z "$num2" ]] && num2=0  #by settings these values in the shell.
+[[ -z "$num2" ]] && num2=0  #by setting these values in the shell.
 [[ -z "$num3" ]] && num3=0
 [[ -z "$num4" ]] && num4=1
 doms=0
